@@ -1,0 +1,32 @@
+Prezentare proiect 
+ 
+Proiectul este alcatuit din urmatoarele functii: 
+ 
+- XORSHIFT32, ce furnizeaza secventa de numere aleatoare plecand de la valoarea initiala(seed), generand astfel n numere; 
+ 
+- liniarizare_imagine- o functie ce primeste calea imaginii initiale, furnizeaza prin intermediul parametrilor dimensiunea, lungimea, inaltimea , copiaza headerul si formeaza vectorul liniarizat(citeste fiecare pixel si il adauga in vectorul v), la final returnandu-l; 
+ 
+-  creare_img- o functie care plecand de la un vector liniarizat, utilizand header-ul salvat prin intermediul functiei anterioare, salveaza in memoria externa imaginea corespunzatoare vectorului; Copiem in noua imagine intai header-ul(deoarece va avea aceleasi proprietati-inaltime,latime,dimensiune), iar apoi afisam fiecare pixel cu cele 3 canale de culoare; 
+ 
+- test_chi_patrat- functia care afiseaza pe ecran valorile testului chi-patrat. Functia primeste un singur parametru si anume calea imaginii asupra careia se va aplica testul; 
+ 
+- criptare-functia care primeste ca parametru calea imaginii initiale, calea imaginii ce va rezulta in urma criptarii si calea fisierului ce contine cheia secreta. Se liniarizeaza imaginea initiala, se permuta pixelii cu ajutorul numerelor aleatoare generate prin XORSHIFT32, iar apoi fiecarui pixel i se va aplica relatia de substitutie. Functia va returna un pointer ce va retine adresa catre noul vector liniarizat al imaginii criptate. 
+ 
+- decriptare-functia inversa criptarii. Primeste ca parametrii calea imaginii initiale, calea imaginii criptate si calea fisierului ce contine cheia secreta. Se liniarizeaza imaginea criptata. Folosind primele (inaltime*latime-1) numere aleatoare generate, calculam permutarea inversa. Se aplica relatia de substitutie fiecarui pixel( vectorul ff retine o copie a imaginii criptate, intrucat XOR-area se face utilizand pixelul criptat si nu cel decriptat anterior-diferenta fata de criptare). La final, se permuta pixelii conform permutare_inv, iar functia va returna un pointer catre noul vector liniarizat al imaginii decriptate. 
+ 
+- match-functia care primeste ca parametrii informatii despre imaginea asupra careia se va aplica procesul de template matching(inaltime, latime si vectorul sau liniarizat), informatii despre template(inaltime, latime, vector liniarizat), tipul tabloului, pragul de corelatie. Functia va furniza prin intermediul parametrului D_lung, lungimea vectorului de detectii si anume, numar de detectii ale ferestrei respective in imaginea mare. Prima etapa este aceea de a transforma ambele imagini(initiala si template) in tonuri de gri. Apoi, pentru a acoperi cazul in care sablonul iese din imagine, adaugam pixeli(0,0,0) in 
+jurul imaginii astfel incat sa putem pune coltul stanga jos al template-lui in coltul dreapta sus al imaginii si dreapta sus al template-lui in coltul stanga jos al imaginii.  Calculam in Tmed media valorilor intensitatilor grayscale a pixelilor din template, iar in Tdev deviatia standard a acestora. Ulterior, pentru fiecare pixel al imaginii, calculam Imed(media intensitatilor) si Idev(deviatia) si corelatia. Daca corelatia va fi mai mare decat pragul dat, detectia va fi pastrata in vector. 
+ 
+- min-functie ce calculeaza minimul intre 2 valori date; 
+ 
+- max-functie ce calculeaza maximul intre 2 valori date; 
+ 
+- contur- functie ce primeste ca parametrii informatii despre o imagine(dimensiune, vectorul sau liniarizat), o fereastra f ce contine 4 colturi si o culoare. Functia va parcurge imaginea intre cele 4 colturi si va modifica pixelii, astfel incat sa realizeze un chenar de culoarea data. Returneaza un pointer catre vectorul liniarizat modificat; 
+ 
+- sunt_suprapuse-functia primeste ca parametrii 2 detectii si returneaza 1 daca se suprapun(suprapunere>0,2) sau 0 in caz contrat;  
+ 
+- sortare_detectii-functie care primeste ca parametru un vector de detectii de lungime n, si cu ajutorul functiei cmp sorteaza in ordine descrecatoare vectorul in functie de scorul de corelatie; 
+ 
+- elimina_nonmaxime-functie care primeste ca parametru un vector de detectii si lungimea sa. Functia elimina detectii care se suprapun(corelatia lor va deveni 0). Se creaza un nou tablou in care se retin detectiile ramase, ce va fi ulterior returnat. 
+ 
+- In meniul principal, se ruleaza prima data partea de criptare. Se introduc de la tastatura numele imaginii ce urmeaza a fi criptate, precum si numele fisierului asupra caruia se va aplica testul chi_patrat. Imaginea cu numele “criptare.bmp” reprezinta imaginea rezultata in urma procesului de criptare, iar “decriptare.bmp” in urma procesului de decriptare. Pe ecran se vor afisa rezultatele testului chi_patrat pentru imaginea aleasa. Partea a doua a main-lui ruleaza template maching-ul. Se deschide fiecare sablon(cifrele de la 0-9), se retine in tabloul bidimensional aux vectorul de detectie al fiecarei cifre. Urmeaza ca in vectorul D de detectii sa retinem toate detectiile de la fiecare cifra. Acesta va fi sortat, se vor elimina suprapunerile si in functie de culoare, fiecare sablon va fi conturat
